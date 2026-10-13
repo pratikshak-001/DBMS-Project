@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TicketEase — Book experiences</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#"><span class="brand-mark">T</span> TicketEase</a>
+    <nav><a href="#events">Explore</a><a href="#how">How it works</a></nav>
+    <div class="top-actions"><button class="btn btn-ghost" id="loginOpen">Log in</button><button class="btn btn-primary" id="signupOpen">Sign up</button></div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="dot"></span> YOUR NEXT GREAT EXPERIENCE STARTS HERE</div>
+        <h1>Make plans.<br><span>Make memories.</span></h1>
+        <p>Discover live shows, music, comedy and experiences worth leaving home for.</p>
+        <a class="btn btn-primary btn-large" href="#events">Explore events <span>↗</span></a>
+        <div class="hero-proof"><div class="avatars"><span>✦</span><span>♫</span><span>★</span></div><span><b>One place</b> for your next favourite event</span></div>
+      </div>
+      <div class="hero-art">
+        <div class="art-glow"></div>
+        <div class="ticket ticket-back"><span>LIVE / 2026</span><b>GOOD<br>VIBES</b><small>ADMIT ONE</small></div>
+        <div class="ticket ticket-front"><div class="ticket-top"><span>TE / EXPERIENCE PASS</span><span>№ 001</span></div><div class="ticket-graphic">♫</div><h3>Make it<br>memorable.</h3><div class="ticket-bottom"><span>YOUR NIGHT OUT</span><span>✦ ✦ ✦</span></div></div>
+        <div class="floating-note">✦ <span>Find your<br>next favourite</span></div>
+      </div>
+      <div class="hero-search">
+        <div class="search-icon">⌕</div><input id="searchInput" type="search" placeholder="Search concerts, comedy, workshops..." aria-label="Search events">
+        <select id="categoryFilter" aria-label="Filter category"><option value="all">All categories</option><option>Movie</option><option>Concert</option><option>Sports</option><option>Theatre</option><option>Comedy</option><option>Other</option></select>
+        <button class="btn btn-primary" id="searchBtn">Find events</button>
+      </div>
+    </section>
+
+    <section class="events-section" id="events">
+      <div class="section-head"><div><div class="eyebrow">THE GOOD STUFF</div><h2>Events worth going out for<span>.</span></h2><p>Pick your plan. We’ll help with the tickets.</p></div><div class="api-status" id="apiStatus"><span class="status-dot"></span> Checking connection…</div></div>
+      <div id="eventGrid" class="event-grid"></div>
+      <div id="emptyState" class="empty-state" hidden><div>⌕</div><h3>No events found</h3><p>Try another search or category.</p><button class="btn btn-ghost" id="clearFilters">Clear filters</button></div>
+    </section>
+
+    <section class="how-section" id="how">
+      <div class="eyebrow">SIMPLE AS THAT</div><h2>Your next plan, in three steps.</h2>
+      <div class="steps"><article><span>01</span><div class="step-icon">⌕</div><h3>Find your event</h3><p>Browse the events and discover something you’ll love.</p></article><article><span>02</span><div class="step-icon">▦</div><h3>Choose your tickets</h3><p>Select an event, enter the number of tickets and review the total.</p></article><article><span>03</span><div class="step-icon">✓</div><h3>You're on the list</h3><p>Confirm your booking and keep track of it in My Bookings.</p></article></div>
+    </section>
+    <section class="cta"><div><div class="eyebrow">DON'T MISS OUT</div><h2>Good memories<br>start with a plan.</h2></div><button class="btn btn-light btn-large" onclick="document.querySelector('#events').scrollIntoView({behavior:'smooth'})">Find your next event ↗</button></section>
+  </main>
+  <footer><a class="brand" href="#"><span class="brand-mark">T</span> TicketEase</a><span>Find your people. Find your event.</span><span>© 2026 TicketEase · College project</span></footer>
+
+  <dialog id="authDialog">
+    <form method="dialog" class="dialog-close"><button aria-label="Close">×</button></form>
+    <div class="dialog-content"><div class="eyebrow">WELCOME TO TICKEtease</div><h2 id="authTitle">Log in</h2><p id="authSub">Access your bookings and upcoming plans.</p>
+      <form id="authForm"><label>Name <input id="authName" autocomplete="name" placeholder="Your name" /></label><label>Email <input id="authEmail" type="email" required autocomplete="email" placeholder="you@example.com"></label><label>Password <input id="authPassword" type="password" required autocomplete="current-password" placeholder="Enter password"></label><button class="btn btn-primary full" id="authSubmit" type="submit">Log in</button></form>
+      <p class="switch-auth"><span id="switchText">New to TicketEase?</span> <button id="switchAuth" type="button">Create an account</button></p><p id="authMessage" class="form-message"></p>
+    </div>
+  </dialog>
+
+  <dialog id="bookingDialog">
+    <form method="dialog" class="dialog-close"><button aria-label="Close">×</button></form>
+    <div class="dialog-content"><div class="eyebrow">SAVE YOUR SPOT</div><h2 id="bookingTitle">Book tickets</h2><p id="bookingMeta"></p>
+      <form id="bookingForm">
+        <label>Show ID <input id="bookingShowId" type="number" readonly required></label>
+        <label>User ID <input id="bookingUserId" type="number" min="1" required value="3"><small>Use an existing User_ID from your MySQL User table. Sample user: 3.</small></label>
+        <label>Seat ID <input id="bookingSeatId" type="number" min="1" required placeholder="e.g. 3"><small>Choose a seat ID belonging to this show’s venue and not already booked.</small></label>
+        <label>Ticket type <select id="ticketType"><option>Standard</option><option>Premium</option><option>VIP</option></select></label>
+        <label>Price per ticket (₹) <input id="bookingPrice" type="number" min="0" step="0.01" required value="250"></label>
+        <label>Number of tickets <select id="ticketCount"><option value="1">1 ticket</option></select><small>The current backend creates one ticket per booking request.</small></label>
+        <div class="total-row"><span>Total (estimated)</span><strong id="bookingTotal">₹250</strong></div>
+        <button class="btn btn-primary full" type="submit">Confirm booking</button>
+      </form><p class="tiny-note">College-project demo: the backend currently marks payment as successful automatically. No real payment is processed.</p><p id="bookingMessage" class="form-message"></p>
+    </div>
+  </dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
